@@ -1,0 +1,19 @@
+[Unit]
+Description=ACDV-Teams Captive Portal
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+# Chạy dưới user đang sở hữu project (thay đổi nếu khác)
+User=acdv-teams
+Group=acdv-teams
+Type=simple
+# Thư mục chứa main.py (chứa .env, data/, frontend/)
+WorkingDirectory=/home/acdv-teams/Desktop/wifi/wifi
+ExecStart=/home/acdv-teams/Desktop/wifi/wifi/run.sh
+Restart=always
+RestartSec=5
+# main.py tự nạp .env trong WorkingDirectory, nên không cần truyền Environment.
+
+[Install]
+WantedBy=multi-user.target

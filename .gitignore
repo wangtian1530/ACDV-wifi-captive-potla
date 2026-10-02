@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Dữ liệu sản phẩm (chứa trạng thái hệ thống / voucher)
+acdv_data.json
+acdv_chat.json
+data/ip_data/
+data/*.json
+.backup_data/
+*.log
+
+# Mật khẩu / cấu hình nhạy cảm
+.env
+*.env
+
+# Hệ điều hành
+.DS_Store

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ACDV - Kết nối Internet</title>
+    <link href="/static/fontawesome/all.min.css" rel="stylesheet">
+    <link href="/static/styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo"><i class="fas fa-network-wired"></i> <span>ACDV</span>-Teams</div>
+            
+        </header>
+
+        <main id="main-content"></main>
+
+        <footer class="footer-contact">
+            <div class="contact-items">
+                <a id="fb-link" href="#" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
+                <a id="tg-link" href="#" target="_blank"><i class="fab fa-telegram"></i> Telegram</a>
+                <a id="phone-link" href="#"><i class="fas fa-phone"></i> Hotline</a>
+                <a id="email-link" href="#"><i class="fas fa-envelope"></i> Email</a>
+            </div>
+            <div class="legal-links">
+                <button class="legal-link" type="button" data-legal-dialog="terms-dialog"><i class="fas fa-file-contract"></i> Điều khoản sử dụng</button>
+                <button class="legal-link" type="button" data-legal-dialog="privacy-dialog"><i class="fas fa-shield-alt"></i> Chính sách bảo mật</button>
+            </div>
+            <div class="footer-note">© 2026 ACDV-Teams Network Routing • Powered by Python</div>
+        </footer>
+    </div>
+
+    <dialog id="terms-dialog" class="legal-dialog">
+        <div class="legal-dialog-header">
+            <h2><i class="fas fa-file-contract"></i> Điều khoản sử dụng</h2>
+            <button class="legal-close" type="button" aria-label="Đóng"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="legal-content">
+            <p>ACDV-Teams cung cấp dịch vụ kết nối và truy cập Internet. Khi sử dụng dịch vụ, quý khách đồng ý với các điều khoản dưới đây.</p>
+            <h3>1. Phạm vi dịch vụ</h3>
+            <p>Quý khách được sử dụng Internet thông thường trong phạm vi gói dịch vụ đã đăng ký. Lưu lượng truy cập được định tuyến qua hệ thống lọc AdGuard và các cơ chế bảo vệ mạng cần thiết.</p>
+            <h3>2. Sử dụng hợp pháp</h3>
+            <p>Không được sử dụng dịch vụ để thực hiện hành vi vi phạm pháp luật Việt Nam, xâm nhập trái phép, phát tán mã độc, lừa đảo, xâm phạm quyền của người khác hoặc truy cập nội dung bị pháp luật cấm. Các website hoặc đích đến vi phạm có thể bị chặn hoặc chuyển hướng tự động.</p>
+            <p>ACDV-Teams cung cấp dịch vụ truy cập mạng, không cung cấp công cụ truy cập Internet ẩn danh hoặc công cụ che giấu danh tính để phục vụ hành vi vi phạm pháp luật.</p>
+            <h3>3. Trách nhiệm và minh bạch</h3>
+            <p>Quý khách tự chịu trách nhiệm về hoạt động và nội dung phát sinh từ thiết bị, tài khoản hoặc địa chỉ IP của mình. Chúng tôi duy trì cơ chế vận hành minh bạch, hỗ trợ kiểm tra trạng thái dịch vụ và xử lý hợp lý các trường hợp khách hàng đã thanh toán nhưng chưa thể sử dụng dịch vụ.</p>
+            <p>Chúng tôi có thể phối hợp với cơ quan có thẩm quyền khi pháp luật yêu cầu. Điều khoản có thể được cập nhật để phù hợp với quy định hiện hành.</p>
+        </div>
+    </dialog>
+
+    <dialog id="privacy-dialog" class="legal-dialog">
+        <div class="legal-dialog-header">
+            <h2><i class="fas fa-shield-alt"></i> Chính sách bảo mật</h2>
+            <button class="legal-close" type="button" aria-label="Đóng"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="legal-content">
+            <p>Chúng tôi tôn trọng quyền riêng tư và chỉ xử lý thông tin cần thiết cho việc cung cấp, bảo vệ và hỗ trợ dịch vụ.</p>
+            <h3>1. Thông tin được thu thập</h3>
+            <p>Hệ thống có thể ghi nhận địa chỉ IP, mã nhận diện thiết bị, thông tin kỹ thuật của thiết bị và dữ liệu vận hành cần thiết. Nhật ký hệ thống được sử dụng để xác thực, định tuyến, giới hạn lưu lượng, phát hiện sự cố và bảo vệ an toàn mạng.</p>
+            <h3>2. Rà soát và xử lý lưu lượng</h3>
+            <p>Để thực hiện định tuyến và lọc an toàn, hệ thống có thể rà soát địa chỉ IP và đích đến của kết nối; lưu lượng sau đó được chuyển tiếp đến đích. Chúng tôi không chủ động can thiệp vào nội dung trao đổi ngoài phạm vi cần thiết để vận hành, lọc và bảo vệ hệ thống.</p>
+            <h3>3. Bảo vệ thông tin</h3>
+            <p>Chúng tôi áp dụng biện pháp phù hợp để bảo vệ dữ liệu, hạn chế truy cập trái phép và không sử dụng thông tin thu thập cho mục đích ngoài phạm vi dịch vụ, trừ khi được khách hàng đồng ý hoặc pháp luật yêu cầu.</p>
+            <p>Thông tin có thể được cung cấp cho cơ quan nhà nước có thẩm quyền khi có yêu cầu hợp lệ. Việc cung cấp và bảo vệ dịch vụ luôn được thực hiện theo pháp luật Việt Nam.</p>
+        </div>
+    </dialog>
+
+    <script src="/static/app.js"></script>
+    <script>
+        document.querySelectorAll("[data-legal-dialog]").forEach((button) => {
+            button.addEventListener("click", () => document.getElementById(button.dataset.legalDialog).showModal());
+        });
+        document.querySelectorAll(".legal-dialog").forEach((dialog) => {
+            dialog.querySelector(".legal-close").addEventListener("click", () => dialog.close());
+            dialog.addEventListener("click", (event) => {
+                if (event.target === dialog) dialog.close();
+            });
+        });
+    </script>
+</body>
+</html>
