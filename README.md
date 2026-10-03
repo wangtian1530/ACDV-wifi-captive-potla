@@ -209,7 +209,7 @@ Sau khi clone repository, remote `origin` và nhánh `main` đã được thiế
 git pull origin main
 ```
 
-Để gửi thay đổi của bạn lên GitHub, kiểm tra danh sách file trước, rồi commit và push:
+Để lên GitHub, kiểm tra danh sách file trước, rồi commit và push:
 
 ```bash
 git status
