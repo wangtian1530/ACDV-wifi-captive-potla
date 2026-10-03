@@ -1,6 +1,7 @@
 [Unit]
 Description=ACDV-Teams Captive Portal
-After=network-online.target
+Requires=acdv-nftables.service
+After=network-online.target acdv-nftables.service
 Wants=network-online.target
 
 [Service]

@@ -119,13 +119,16 @@ Các trang mặc định:
 
 Nếu captive redirect ngoài mạng chuyển cổng 80 về cổng 8080 thì khách có thể được đưa tới portal tự động. Trình duyệt hiện đại thường hạn chế captive portal qua HTTPS; kiểm thử trên thiết bị/mạng đích trước khi vận hành.
 
-### 4. Chạy cùng systemd (tùy chọn)
+### 4. Cài tự động cùng systemd (tùy chọn)
 
-Unit mẫu nằm trong `systemd/acdv-portal.service`; cần sửa `User`, `Group`, `WorkingDirectory` và `ExecStart` cho đúng vị trí cài đặt trước khi cài. Script cài đặt cần quyền quản trị:
+Trước khi cài, mở `systemd/acdv-portal.nft` và kiểm tra các giá trị theo gateway thực tế: uplink `wlp2s0`, interface Wi-Fi/LAN `enp0s31f6`, IP home `10.10.10.13`, portal `10.10.10.1` và gateway redirect `192.168.1.1`. Script nạp file này tự động ngay lúc cài và mỗi lần khởi động; nó thay thế riêng table `inet quy-tac-mang` (không xóa các table nftables khác). Chain forward có policy `drop`, vì vậy cấu hình sai interface/IP có thể làm gián đoạn chuyển tiếp mạng. Luật DNS chuyển tiếp yêu cầu có DNS service lắng nghe tại `10.10.10.1:53`.
+
+Script cài đặt cần quyền quản trị. Unit mẫu cũng giả định user/group `acdv-teams` và thư mục dự án `/home/acdv-teams/Desktop/wifi/wifi`; sửa các giá trị này trong `systemd/acdv-portal.service` nếu đặt ở nơi khác:
 
 ```bash
 sudo bash systemd/install_service.sh
 sudo systemctl status acdv-portal
+sudo systemctl status acdv-nftables
 sudo journalctl -u acdv-portal -f
 ```
 
