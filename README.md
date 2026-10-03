@@ -78,11 +78,29 @@ sequenceDiagram
 ### 1. Lấy mã nguồn
 
 ```bash
-git clone <URL_REPOSITORY>
-cd <THU_MUC_DU_AN>
+git clone https://github.com/wangtian1530/ACDV-wifi-captive-potla.git
+cd ACDV-wifi-captive-potla
 ```
 
-### 2. Cấu hình mật khẩu
+### 2. Cài gói hệ thống và kiểm tra mạng
+
+Trên Debian/Ubuntu, cài các công cụ cần thiết:
+
+```bash
+sudo apt update
+sudo apt install -y python3 python3-venv nftables iptables iproute2 iputils-ping
+```
+
+Xem tên interface và default route trước khi chỉnh ruleset:
+
+```bash
+ip -br link
+ip route
+```
+
+Mở `systemd/acdv-portal.nft` và thay `wlp2s0`, `enp0s31f6`, địa chỉ trong `home`, địa chỉ portal và gateway redirect bằng thông tin đúng của máy. Kiểm tra `backend/config.py` (đặc biệt `INTERFACE`, `PORTAL_IP` và file DHCP lease) cùng `systemd/acdv-portal.service` (User/Group và đường dẫn project). Không áp dụng cấu hình mẫu khi chưa xác nhận các giá trị này.
+
+### 3. Cấu hình mật khẩu
 
 Tạo file `.env` tại thư mục gốc dự án:
 
@@ -95,7 +113,7 @@ ACDV_SUDO_PASSWORD=
 - `ACDV_SUDO_PASSWORD`: tùy chọn theo cấu hình sudo của máy. Ứng dụng dùng `sudo -S` khi gọi nftables/iptables và đọc traffic counter. Không đặt mật khẩu thật trong README, source code hoặc Git.
 - `main.py` tự nạp `.env`; biến môi trường đã có sẵn được ưu tiên hơn giá trị trong file.
 
-### 3. Khởi chạy
+### 4. Khởi chạy thủ công
 
 Script tạo `.venv`, cài các package trong `requirements.txt` rồi chạy ứng dụng:
 
@@ -119,20 +137,23 @@ Các trang mặc định:
 
 Nếu captive redirect ngoài mạng chuyển cổng 80 về cổng 8080 thì khách có thể được đưa tới portal tự động. Trình duyệt hiện đại thường hạn chế captive portal qua HTTPS; kiểm thử trên thiết bị/mạng đích trước khi vận hành.
 
-### 4. Cài tự động cùng systemd (tùy chọn)
+> Chạy `./run.sh` chỉ khởi động ứng dụng; nó không cài luật firewall. Muốn installer nạp nftables và tự khởi động portal khi reboot, làm theo bước systemd bên dưới.
 
-Trước khi cài, mở `systemd/acdv-portal.nft` và kiểm tra các giá trị theo gateway thực tế: uplink `wlp2s0`, interface Wi-Fi/LAN `enp0s31f6`, IP home `10.10.10.13`, portal `10.10.10.1` và gateway redirect `192.168.1.1`. Script nạp file này tự động ngay lúc cài và mỗi lần khởi động; nó thay thế riêng table `inet quy-tac-mang` (không xóa các table nftables khác). Chain forward có policy `drop`, vì vậy cấu hình sai interface/IP có thể làm gián đoạn chuyển tiếp mạng. Luật DNS chuyển tiếp yêu cầu có DNS service lắng nghe tại `10.10.10.1:53`.
+### 5. Cài tự động cùng systemd
 
-Script cài đặt cần quyền quản trị. Unit mẫu cũng giả định user/group `acdv-teams` và thư mục dự án `/home/acdv-teams/Desktop/wifi/wifi`; sửa các giá trị này trong `systemd/acdv-portal.service` nếu đặt ở nơi khác:
+Sau khi xác nhận cấu hình mạng, installer sẽ kiểm tra và áp dụng `systemd/acdv-portal.nft`, cài/bật service `acdv-nftables`, rồi cài/bật portal. Luật được nạp lúc cài và trước khi portal chạy mỗi lần máy khởi động. Bộ áp dụng thay thế riêng table `inet quy-tac-mang`; các table nftables khác không bị xóa. Chain forward có policy `drop`, vì vậy cấu hình sai interface/IP có thể làm gián đoạn chuyển tiếp mạng. Luật DNS chuyển tiếp yêu cầu có DNS service lắng nghe tại `10.10.10.1:53`.
+
+Unit portal mẫu giả định user/group `acdv-teams` và thư mục `/home/acdv-teams/Desktop/wifi/wifi`; sửa các giá trị trong `systemd/acdv-portal.service` nếu repository được clone ở vị trí khác. Chạy installer từ thư mục gốc repository:
 
 ```bash
-sudo bash systemd/install_service.sh
+sudo bash ./systemd/install_service.sh
 sudo systemctl status acdv-portal
 sudo systemctl status acdv-nftables
 sudo journalctl -u acdv-portal -f
+sudo nft list table inet quy-tac-mang
 ```
 
-Ứng dụng vẫn cần quyền phù hợp để chạy các lệnh mạng qua sudo. Trên máy chủ production, nên dùng tài khoản dịch vụ riêng và chính sách sudo giới hạn đúng lệnh cần thiết thay vì cấp quyền rộng.
+Nếu chỉ muốn nạp/cập nhật luật mà chưa chạy installer, có thể chạy `sudo bash ./systemd/apply_nftables.sh` sau khi đã sửa và rà soát file ruleset. Ứng dụng vẫn cần quyền phù hợp để chạy các lệnh mạng qua sudo. Trên máy chủ production, nên dùng tài khoản dịch vụ riêng và chính sách sudo giới hạn đúng lệnh cần thiết thay vì cấp quyền rộng.
 
 ## Dữ liệu và cách tính dung lượng
 
@@ -179,6 +200,26 @@ Một số luồng mạng cần Linux gateway và nftables/iptables thật; ki�
 - File admin cookie hiện là session phía server; chỉ nên quản trị trong mạng tin cậy. Nếu truy cập qua mạng không tin cậy, đặt sau HTTPS/reverse proxy và đánh giá lại thuộc tính cookie, xác thực, phân quyền và chính sách firewall.
 - `ACDV_SUDO_PASSWORD` trong `.env` là bí mật dạng văn bản thuần. Ưu tiên cấu hình sudoers tối thiểu phù hợp với vận hành và bảo vệ quyền đọc file cấu hình.
 - Trước khi đưa repository lên public, rà soát toàn bộ lịch sử Git, dữ liệu mẫu và thông tin liên hệ/cấu hình nhúng; thêm `.env.example` chỉ chứa giá trị giả nếu cần.
+
+## Cập nhật mã nguồn lên GitHub
+
+Sau khi clone repository, remote `origin` và nhánh `main` đã được thiết lập sẵn. Để lấy thay đổi mới từ GitHub:
+
+```bash
+git pull origin main
+```
+
+Để gửi thay đổi của bạn lên GitHub, kiểm tra danh sách file trước, rồi commit và push:
+
+```bash
+git status
+git add -A
+git status
+git commit -m "Mo ta thay doi"
+git push origin main
+```
+
+`git add -A` chỉ an toàn khi các file bí mật/dữ liệu cục bộ vẫn được ignore trong `.gitignore`; luôn kiểm tra lần `git status` thứ hai và không commit `.env`, `acdv_data.json`, `acdv_chat.json` hay dữ liệu khách. Tài khoản GitHub cần có quyền ghi vào repository để push.
 
 ## Giấy phép
 
